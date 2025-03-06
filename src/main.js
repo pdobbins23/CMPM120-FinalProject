@@ -2,18 +2,24 @@
 // Date:
 
 // CODE ARMOR
-'use strict'
 
-// define game object
+'use strict';
+
 let config = {
-    parent: 'phaser-game',
-    type: Phaser.CANVAS,
-    pixelArt: true,
-    width: 800,
-    height: 600,
-    scene: [ Basics ]
-}
+    parent: 'myGame',
+    type: Phaser.AUTO,
+    height: 640,
+    width: 960,
+    scale: {
+        autoCenter: Phaser.Scale.CENTER_BOTH
+    },
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { x: 0, y: 0 }
+        }
+    },
+    scene: [ Menu, Play ]
+};
 
-const game = new Phaser.Game(config)
-
-let cursors = null
+let game = new Phaser.Game(config);
