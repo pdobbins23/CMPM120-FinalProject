@@ -8,16 +8,18 @@
 let config = {
     parent: 'myGame',
     type: Phaser.AUTO,
-    height: 640,
-    width: 960,
+    width: 640,
+    height: 480,
     scale: {
-        autoCenter: Phaser.Scale.CENTER_BOTH
+      mode: Phaser.Scale.FIT,
+      autoCenter: Phaser.Scale.CENTER_BOTH,
+      zoom: 1,
     },
     physics: {
-        default: 'arcade',
-        arcade: {
-            gravity: { x: 0, y: 0 }
-        }
+      default: 'arcade',
+      arcade: {
+          gravity: { x: 0, y: 0 }
+      }
     },
     scene: [ Menu, Play ]
 };

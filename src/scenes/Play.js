@@ -4,15 +4,26 @@ class Play extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('player', 'assets/sprites/player.png');
-        this.load.image('ground', 'assets/sprites/ground.png');
-        this.load.image('reward', 'assets/sprites/reward.png');
-        this.load.image('obstacle', 'assets/sprites/obstacle.png');
+        // Player Sprites
+        this.load.image('morty-baby', 'assets/img/morty-baby.png');
+        this.load.image('morty-toddler', 'assets/img/morty-toddler.png');
+        this.load.image('morty-child', 'assets/img/morty-child.png');
+        this.load.image('morty-teen', 'assets/img/morty-teen.png');
+        this.load.image('morty-youngadult', 'assets/img/morty-youngadult.png');
+        this.load.image('morty-adult', 'assets/img/morty-adult.png');
+        this.load.image('morty-senior', 'assets/img/morty-senior.png');
+
+        // Grounds / Backgrounds
+        this.load.image('ground', 'assets/img/ground.png');
+
+        // Collectibles
+        this.load.image('reward', 'assets/img/reward.png');
+        this.load.image('obstacle', 'assets/img/obstacle.png');
     }
 
     create() {
         this.stageIndex = 0;
-        this.stages = ['Toddler', 'Elementary', 'Teenager', 'Young Adult', 'Adult', 'Senior'];
+        this.stages = ['baby', 'toddler', 'child', 'teen', 'youngadult', 'adult', 'senior'];
         this.stageDuration = 30000; // 30 seconds per stage
         this.score = 0;
         
@@ -22,7 +33,7 @@ class Play extends Phaser.Scene {
         this.ground = this.physics.add.staticGroup();
         this.ground.create(400, 580, 'ground').setScale(2).refreshBody();
         
-        this.player = this.physics.add.sprite(100, 500, 'player');
+        this.player = this.physics.add.sprite(100, 500, 'morty-' + this.stages[this.stageIndex]);
         this.player.setCollideWorldBounds(true);
         this.physics.add.collider(this.player, this.ground);
         
