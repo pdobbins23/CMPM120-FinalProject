@@ -151,6 +151,10 @@ class Play extends Phaser.Scene {
                 this.player.setTint(0xFFFFFF);
             }
         }
+
+        if (this.playerState.health <= 0) {
+            this.scene.start('Menu');
+        }
     }
 
     transitionTime() {
