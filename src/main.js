@@ -15,6 +15,9 @@ let config = {
       autoCenter: Phaser.Scale.CENTER_BOTH,
       zoom: 1,
     },
+    render: {
+      pixelArt: true,
+    },
     physics: {
       default: 'arcade',
       arcade: {
