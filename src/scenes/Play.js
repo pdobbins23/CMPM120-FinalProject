@@ -56,6 +56,7 @@ class Play extends Phaser.Scene {
             health: 100,
             injured: false,
             ill: false,
+            illTime: 0,
             relationship: null, // { target: object, status: "married"/"girlfriend" }
             hasJob: false,
             emotionalState: 100,
@@ -114,7 +115,7 @@ class Play extends Phaser.Scene {
         ];
     }
 
-    update() {
+    update(time, deltaTime) {
         let velocity = new Phaser.Math.Vector2(0, 0);
         
         if (this.cursors.up.isDown) {
@@ -137,6 +138,19 @@ class Play extends Phaser.Scene {
 
         this.player.setVelocity(velocity.x * this.playerState.speed, velocity.y * this.playerState.speed);
         this.player.setDepth(this.player.y);
+
+        if (this.playerState.ill) {
+            this.playerState.illTime -= deltaTime;
+
+            if (Math.floor(this.playerState.illTime) % 500) {
+                this.playerState.health -= 1;
+            }
+            
+            if (this.playerState.illTime <= 0) {
+                this.playerState.ill = false;
+                this.player.setTint(0xFFFFFF);
+            }
+        }
     }
 
     transitionTime() {
@@ -159,6 +173,8 @@ class Play extends Phaser.Scene {
         event.body.setSize(event.width, 10).setOffset(0, event.height - 10);
 
         event.eventType = Phaser.Math.Between(0, 5);
+
+        event.setTint(0x3F0F * (event.eventType + 1));
     }
 
     playEvent(player, event) {
@@ -175,11 +191,13 @@ class Play extends Phaser.Scene {
 
         if (effect.ill) {
             this.playerState.ill = effect.ill;
+            this.playerState.illTime = Phaser.Math.Between(5000, 15000);
+            this.player.setTint(0x00FF00);
         }
 
         if (effect.relationship) {
             this.playerState.relationship = effect.relationship;
-            event.startFollow(player);
+            // event.startFollow(player);
         }
 
         if (effect.hasJob) {
@@ -194,8 +212,8 @@ class Play extends Phaser.Scene {
             this.playerState.accomplishment += effect.accomplishment;
         }
 
-        if (!effect.relationship)
-            event.destroy();
+        // if (!effect.relationship)
+        event.destroy();
         
         this.score += 10;
         this.scoreText.setText('Score: ' + this.score);
