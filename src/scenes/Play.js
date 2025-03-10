@@ -20,10 +20,18 @@ class Play extends Phaser.Scene {
         this.load.image('event', 'assets/img/event.png');
 
         // SFX
-        this.load.audio('morty-jump', 'assets/sfx/jump.wav');
+        this.load.audio('morty-hurt', 'assets/sfx/hurt.wav');
+        this.load.audio('morty-event', 'assets/sfx/event.wav');
+        this.load.audio('music-level', 'assets/sfx/level.wav');
     }
 
     create() {
+        this.backgroundMusic = this.sound.add("music-level", { loop: true });
+        this.backgroundMusic.play();
+
+        this.mortyHurt = this.sound.add("morty-hurt");
+        this.mortyEvent = this.sound.add("morty-event");
+
         this.stageIndex = 0;
         this.stages = ['Baby', 'Toddler', 'Child', 'Teen', 'Young Adult', 'Adult', 'Senior'];
         this.stageDurations = [10000, 15000, 17500, 20000, 30000, 60000, 30000];
@@ -59,8 +67,8 @@ class Play extends Phaser.Scene {
         
         this.events = this.physics.add.group();
 
-        this.physics.add.collider(this.player, this.obstacles, this.gameOver, null, this);
-        this.physics.add.overlap(this.player, this.rewards, this.collectReward, null, this);
+        // this.physics.add.collider(this.player, this.obstacles, this.gameOver, null, this);
+        this.physics.add.overlap(this.player, this.events, this.playEvent, null, this);
 
         this.time.addEvent({ delay: this.stageDurations[this.stageIndex], callback: this.transitionTime, callbackScope: this, loop: false });
         this.time.addEvent({ delay: 1500, callback: this.spawnEvent, callbackScope: this, loop: true });
@@ -111,10 +119,11 @@ class Play extends Phaser.Scene {
         event.body.setSize(event.width, 10).setOffset(0, event.height - 10);
     }
 
-    collectReward(player, reward) {
+    playEvent(player, reward) {
         reward.destroy();
         this.score += 10;
         this.scoreText.setText('Score: ' + this.score);
+        this.mortyEvent.play();
     }
 
     gameOver() {
