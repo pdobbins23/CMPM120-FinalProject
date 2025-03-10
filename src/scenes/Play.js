@@ -26,7 +26,7 @@ class Play extends Phaser.Scene {
     }
 
     create() {
-        this.backgroundMusic = this.sound.add("music-level", { loop: true });
+        this.backgroundMusic = this.sound.add("music-level", { loop: true, volume: 0.5 });
         this.backgroundMusic.play();
 
         this.mortyHurt = this.sound.add("morty-hurt");
