@@ -36,6 +36,8 @@ class Play extends Phaser.Scene {
         this.stages = ['Baby', 'Toddler', 'Child', 'Teen', 'Young Adult', 'Adult', 'Senior'];
         this.stageDurations = [10000, 15000, 17500, 20000, 30000, 60000, 30000];
         this.score = 0;
+
+        this.physics.world.setBounds(0, this.cameras.main.height / 2, 640, 240);
         
         this.ground = this.physics.add.staticGroup();
         this.ground.create(0, 0, 'ground').setOrigin(0, 0);
