@@ -8,8 +8,8 @@ class Menu extends Phaser.Scene {
     }
 
     create() {
-        this.add.text(400, 200, 'Blips & Chitz: Roy', { fontSize: '32px', fill: '#fff' }).setOrigin(0.5);
-        this.add.text(400, 300, 'Press SPACE to Start', { fontSize: '24px', fill: '#fff' }).setOrigin(0.5);
+        this.add.text(325, 200, 'Blips & Chitz: Roy', { fontSize: '32px', fill: '#fff' }).setOrigin(0.5);
+        this.add.text(325, 300, 'Press SPACE to Start', { fontSize: '24px', fill: '#fff' }).setOrigin(0.5);
         
         // this.sound.add('menuMusic').play({ loop: true });
 

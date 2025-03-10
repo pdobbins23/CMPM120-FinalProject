@@ -33,14 +33,24 @@ class Play extends Phaser.Scene {
         this.ground = this.physics.add.staticGroup();
         this.ground.create(0, 0, 'ground').setOrigin(0, 0);
 
-        const playerHitboxHeight = 10;
+        this.playerHitboxHeight = 10;
         
         this.player = this.physics.add.sprite(100, 500, 'morty-' + this.stages[this.stageIndex]);
         this.player.setOrigin(0.5, 1).setDepth(1);
-        this.player.body.setSize(this.player.width, playerHitboxHeight).setOffset(0, this.player.height -playerHitboxHeight);
+        this.player.body.setSize(this.player.width, this.playerHitboxHeight).setOffset(0, this.player.height -this.playerHitboxHeight);
         this.player.setCollideWorldBounds(true);
 
-        this.playerSpeed = 160;
+        this.playerSpeeds = [50, 60, 100, 120, 125, 120, 100];
+
+        this.playerState = {
+            speed: 50,
+            health: 100,
+            injured: false,
+            ill: false,
+            relationship: null, // { target: object, status: "married"/"girlfriend" }
+            hasJob: false,
+            emotionalState: 100,
+        };
 
         this.add.text(20, 20, 'Stage: ' + this.stages[this.stageIndex], { fontSize: '20px', fill: '#fff' });
         this.scoreText = this.add.text(500, 20, 'Score: 0', { fontSize: '20px', fill: '#fff' });
@@ -59,25 +69,28 @@ class Play extends Phaser.Scene {
     }
 
     update() {
-        let velocity = {x: 0, y: 0};
+        let velocity = new Phaser.Math.Vector2(0, 0);
         
         if (this.cursors.up.isDown) {
-            velocity.y -= this.playerSpeed;
+            velocity.y -= 1;
         }
 
         if (this.cursors.down.isDown) {
-            velocity.y += this.playerSpeed;
+            velocity.y += 1;
         }
 
         if (this.cursors.left.isDown) {
-            velocity.x -= this.playerSpeed;
+            velocity.x -= 1;
         }
         
         if (this.cursors.right.isDown) {
-            velocity.x += this.playerSpeed;
+            velocity.x += 1;
         }
 
-        this.player.setVelocity(velocity.x, velocity.y);
+        velocity.normalize();
+
+        this.player.setVelocity(velocity.x * this.playerState.speed, velocity.y * this.playerState.speed);
+        this.player.setDepth(this.player.y);
     }
 
     transitionTime() {
@@ -85,7 +98,10 @@ class Play extends Phaser.Scene {
 
         this.player.setTexture('morty-' + this.stages[this.stageIndex]);
         this.player.setOrigin(0.5, 1);
-        this.player.body.setSize(this.player.width, this.player.height);
+        this.player.body.setOffset(0, this.player.height - this.playerHitboxHeight);
+
+        this.playerState.speed = this.playerSpeeds[this.stageIndex];
+        this.playerState.emotionalState -= 25;
     }
 
     spawnObstacle() {
@@ -95,7 +111,9 @@ class Play extends Phaser.Scene {
 
     spawnReward() {
         let reward = this.rewards.create(800, Phaser.Math.Between(300, 500), 'reward');
+        reward.setOrigin(0.5, 1).setDepth(reward.y);
         reward.setVelocityX(-200);
+        reward.body.setSize(reward.width, 10).setOffset(0, reward.height - 10);
     }
 
     collectReward(player, reward) {
