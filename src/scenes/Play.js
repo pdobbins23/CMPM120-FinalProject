@@ -74,6 +74,44 @@ class Play extends Phaser.Scene {
 
         this.time.addEvent({ delay: this.stageDurations[this.stageIndex], callback: this.transitionTime, callbackScope: this, loop: false });
         this.time.addEvent({ delay: 1500, callback: this.spawnEvent, callbackScope: this, loop: true });
+
+        // Events (10 for now)
+        // 0 - Toy (+emotional state)
+        // 1 - Food (+health, +emotional state)
+        // 2 - Playdate (+emotional state, RISK illness)
+        // 3 - Relationship (RISK +emotional state, SET relationship / -emotional state)
+        // 4 - Take Test (CHANCE pass +emotional state, +accomplishment / fail -emotional state)
+        // 5 - Car Accident (RANGE -health, -emotional state)
+        this.eventMap = [
+            (state, evt) => { return { emotionalState: Phaser.Math.Between(5, 10) }; },
+            (state, evt) => { return { health: Phaser.Math.Between(2, 8), emotionalState: Phaser.Math.Between(2, 5) }; },
+            (state, evt) => { return { emotionalState: Phaser.Math.Between(8, 12), ill: Phaser.Math.Between(0, 100) < 25 }; },
+            (state, evt) => {
+                if (Phaser.Math.Between(0, 100) < 15) {
+                    return {
+                        emotionalState: Phaser.Math.Between(10, 20),
+                        relationship: { target: evt, status: "date" },
+                    };
+                } else {
+                    return {
+                        emotionalState: -Phaser.Math.Between(15, 20),
+                    };
+                }
+            },
+            (state, evt) => {
+                if (Phaser.Math.Between(0, 100) < 50) {
+                    return {
+                        emotionalState: Phaser.Math.Between(8, 13),
+                        accomplishment: 3,
+                    };
+                } else {
+                    return {
+                        emotionalState: -Phaser.Math.Between(10, 13),
+                    };
+                }
+            },
+            (state, evt) => { return { health: -Phaser.Math.Between(10, 30), emotionalState: -Phaser.Math.Between(20, 30) }; }
+        ];
     }
 
     update() {
@@ -119,13 +157,51 @@ class Play extends Phaser.Scene {
         event.setOrigin(0.5, 1).setDepth(event.y);
         event.setVelocityX(-200);
         event.body.setSize(event.width, 10).setOffset(0, event.height - 10);
+
+        event.eventType = Phaser.Math.Between(0, 5);
     }
 
-    playEvent(player, reward) {
-        reward.destroy();
+    playEvent(player, event) {
+        console.log(event.eventType);
+        let effect = (this.eventMap[event.eventType])(this.playerState, event);
+
+        if (effect.health) {
+            this.playerState.health += effect.health;
+        }
+
+        if (effect.injured) {
+            this.playerState.injured = effect.injured;
+        }
+
+        if (effect.ill) {
+            this.playerState.ill = effect.ill;
+        }
+
+        if (effect.relationship) {
+            this.playerState.relationship = effect.relationship;
+            event.startFollow(player);
+        }
+
+        if (effect.hasJob) {
+            this.playerState.hasJob = effect.hasJob;
+        }
+
+        if (effect.emotionalState) {
+            this.playerState.emotionalState += effect.emotionalState;
+        }
+
+        if (effect.accomplishment) {
+            this.playerState.accomplishment += effect.accomplishment;
+        }
+
+        if (!effect.relationship)
+            event.destroy();
+        
         this.score += 10;
         this.scoreText.setText('Score: ' + this.score);
         this.mortyEvent.play();
+
+        console.log(this.playerState);
     }
 
     gameOver() {

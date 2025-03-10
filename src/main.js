@@ -22,7 +22,7 @@ let config = {
       default: 'arcade',
       arcade: {
           gravity: { x: 0, y: 0 },
-          debug: true,
+          // debug: true,
       }
     },
     scene: [ Menu, Play ]
