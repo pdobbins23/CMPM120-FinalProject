@@ -17,8 +17,7 @@ class Play extends Phaser.Scene {
         this.load.image('ground', 'assets/img/ground.png');
 
         // Collectibles
-        this.load.image('reward', 'assets/img/reward.png');
-        this.load.image('obstacle', 'assets/img/obstacle.png');
+        this.load.image('event', 'assets/img/event.png');
 
         // SFX
         this.load.audio('morty-jump', 'assets/sfx/jump.wav');
@@ -27,7 +26,7 @@ class Play extends Phaser.Scene {
     create() {
         this.stageIndex = 0;
         this.stages = ['Baby', 'Toddler', 'Child', 'Teen', 'Young Adult', 'Adult', 'Senior'];
-        this.stageDuration = 30000; // 30 seconds per stage
+        this.stageDurations = [10000, 15000, 17500, 20000, 30000, 60000, 30000];
         this.score = 0;
         
         this.ground = this.physics.add.staticGroup();
@@ -50,6 +49,7 @@ class Play extends Phaser.Scene {
             relationship: null, // { target: object, status: "married"/"girlfriend" }
             hasJob: false,
             emotionalState: 100,
+            accomplishment: 0,
         };
 
         this.add.text(20, 20, 'Stage: ' + this.stages[this.stageIndex], { fontSize: '20px', fill: '#fff' });
@@ -57,15 +57,13 @@ class Play extends Phaser.Scene {
         
         this.cursors = this.input.keyboard.createCursorKeys();
         
-        this.rewards = this.physics.add.group();
-        this.obstacles = this.physics.add.group();
+        this.events = this.physics.add.group();
 
         this.physics.add.collider(this.player, this.obstacles, this.gameOver, null, this);
         this.physics.add.overlap(this.player, this.rewards, this.collectReward, null, this);
 
-        this.time.addEvent({ delay: this.stageDuration, callback: this.transitionTime, callbackScope: this, loop: true });
-        this.time.addEvent({ delay: 1000, callback: this.spawnObstacle, callbackScope: this, loop: true });
-        this.time.addEvent({ delay: 1500, callback: this.spawnReward, callbackScope: this, loop: true });
+        this.time.addEvent({ delay: this.stageDurations[this.stageIndex], callback: this.transitionTime, callbackScope: this, loop: false });
+        this.time.addEvent({ delay: 1500, callback: this.spawnEvent, callbackScope: this, loop: true });
     }
 
     update() {
@@ -102,18 +100,15 @@ class Play extends Phaser.Scene {
 
         this.playerState.speed = this.playerSpeeds[this.stageIndex];
         this.playerState.emotionalState -= 25;
+
+        this.time.addEvent({ delay: this.stageDurations[this.stageIndex], callback: this.transitionTime, callbackScope: this, loop: false });
     }
 
-    spawnObstacle() {
-        let obstacle = this.obstacles.create(800, 550, 'obstacle');
-        obstacle.setVelocityX(-200);
-    }
-
-    spawnReward() {
-        let reward = this.rewards.create(800, Phaser.Math.Between(300, 500), 'reward');
-        reward.setOrigin(0.5, 1).setDepth(reward.y);
-        reward.setVelocityX(-200);
-        reward.body.setSize(reward.width, 10).setOffset(0, reward.height - 10);
+    spawnEvent() {
+        let event = this.events.create(800, Phaser.Math.Between(300, 500), 'event');
+        event.setOrigin(0.5, 1).setDepth(event.y);
+        event.setVelocityX(-200);
+        event.body.setSize(event.width, 10).setOffset(0, event.height - 10);
     }
 
     collectReward(player, reward) {
