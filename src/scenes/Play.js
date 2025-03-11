@@ -2,7 +2,7 @@ class Play extends Phaser.Scene {
     constructor() {
         super({ key: 'Play' });
     }
-
+// add when player dies go to end screen
     preload() {
         // Player Sprites
         this.load.image('morty-Baby', 'assets/img/morty-baby.png');
