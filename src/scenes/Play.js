@@ -11,10 +11,13 @@ class Play extends Phaser.Scene {
 		this.load.image("morty-Adult", "assets/img/morty-adult.png");
 		this.load.image("morty-Senior", "assets/img/morty-senior.png");
 
-		// Grounds / Backgrounds
+		// Backgrounds
 		this.load.image("house", "assets/img/house.png");
+		this.load.image("school", "assets/img/school.png");
+		this.load.image("office", "assets/img/office.png");
+		this.load.image("sky", "assets/img/sky.png");
 
-		// Collectibles
+		// Events
 		this.load.image("event", "assets/img/event.png");
 
 		// SFX
@@ -42,12 +45,13 @@ class Play extends Phaser.Scene {
 			"Senior",
 		];
 		this.stageDurations = [10000, 15000, 17500, 20000, 30000, 60000, 30000];
+		
 		this.score = 0;
 
 		this.physics.world.setBounds(0, this.cameras.main.height / 2, 640, 240);
 
 		// Backgrounds
-		this.ground = this.add.tileSprite(0, 0, 0, 0, "house", 0).setOrigin(0).setDepth(10);
+		this.ground = this.add.tileSprite(0, 0, 0, 0, "school", 0).setOrigin(0).setDepth(10);
 
 		this.playerHitboxHeight = 10;
 
