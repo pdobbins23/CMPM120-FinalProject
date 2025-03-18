@@ -47,7 +47,7 @@ class Play extends Phaser.Scene {
 		this.physics.world.setBounds(0, this.cameras.main.height / 2, 640, 240);
 
 		// Backgrounds
-		this.ground = this.add.tileSprite(0, 0, 0, 0, "house", 0).setOrigin(0);
+		this.ground = this.add.tileSprite(0, 0, 0, 0, "house", 0).setOrigin(0).setDepth(10);
 
 		this.playerHitboxHeight = 10;
 
@@ -56,7 +56,7 @@ class Play extends Phaser.Scene {
 			500,
 			"morty-" + this.stages[this.stageIndex],
 		);
-		this.player.setOrigin(0.5, 1).setDepth(1);
+		this.player.setOrigin(0.5, 1).setDepth(100);
 		this.player.body
 			.setSize(this.player.width, this.playerHitboxHeight)
 			.setOffset(0, this.player.height - this.playerHitboxHeight);
@@ -89,7 +89,6 @@ class Play extends Phaser.Scene {
 
 		this.events = this.physics.add.group();
 
-		// this.physics.add.collider(this.player, this.obstacles, this.gameOver, null, this);
 		this.physics.add.overlap(
 			this.player,
 			this.events,
@@ -194,7 +193,7 @@ class Play extends Phaser.Scene {
 			velocity.x * this.playerState.speed,
 			velocity.y * this.playerState.speed,
 		);
-		this.player.setDepth(this.player.y);
+		this.player.setDepth(100 + this.player.y);
 
 		if (this.playerState.ill) {
 			this.playerState.illTime -= deltaTime;
@@ -238,7 +237,7 @@ class Play extends Phaser.Scene {
 
 	spawnEvent() {
 		let event = this.events.create(800, Phaser.Math.Between(300, 500), "event");
-		event.setOrigin(0.5, 1).setDepth(event.y);
+		event.setOrigin(0.5, 1).setDepth(100 + event.y);
 		event.setVelocityX(-200);
 		event.body.setSize(event.width, 10).setOffset(0, event.height - 10);
 
