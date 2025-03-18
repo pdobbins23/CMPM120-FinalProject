@@ -18,21 +18,6 @@ class Menu extends Phaser.Scene {
 		this.add
 			.text(325, 300, "Move: Arrow Keys", { fontSize: "20px", fill: "#fff" })
 			.setOrigin(0.5);
-		this.add
-			.text(325, 350, "Jump: Up Arrow", { fontSize: "20px", fill: "#fff" })
-			.setOrigin(0.5);
-		this.add
-			.text(325, 400, "Collect rewards to increase your score.", {
-				fontSize: "18px",
-				fill: "#fff",
-			})
-			.setOrigin(0.5);
-		this.add
-			.text(325, 420, "Avoid obstacles! If you hit one, the game ends.", {
-				fontSize: "18px",
-				fill: "#fff",
-			})
-			.setOrigin(0.5);
 
 		this.add
 			.text(325, 180, "Press SPACE to Start", {
@@ -45,7 +30,7 @@ class Menu extends Phaser.Scene {
 
 		this.input.keyboard.on("keydown-SPACE", () => {
 			this.sound.stopAll();
-			this.scene.start("Play");
+			this.scene.start("playScene");
 		});
 	}
 }

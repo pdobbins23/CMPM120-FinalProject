@@ -1,15 +1,13 @@
 class Play extends Phaser.Scene {
 	constructor() {
-		super({ key: "Play" });
+		super("playScene");
 	}
-	// add when player dies go to end screen
+
 	preload() {
 		// Player Sprites
 		this.load.image("morty-Baby", "assets/img/morty-baby.png");
 		this.load.image("morty-Child", "assets/img/morty-child.png");
-		this.load.image("morty-Teen", "assets/img/morty-teen.png");
-		this.load.image("morty-Adult", "assets/img/morty-adult.png");
-		this.load.image("morty-Senior", "assets/img/morty-senior.png");
+		this.load.image("morty-Full", "assets/img/morty-full.png");
 
 		// Backgrounds
 		this.load.image("house", "assets/img/house.png");
@@ -213,7 +211,7 @@ class Play extends Phaser.Scene {
 		}
 
 		if (this.playerState.health <= 0) {
-			this.scene.start("Menu");
+			this.scene.start("menuScene");
 		}
 	}
 
