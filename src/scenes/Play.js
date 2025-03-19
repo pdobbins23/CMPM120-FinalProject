@@ -105,9 +105,9 @@ class Play extends Phaser.Scene {
 		this.backgroundMusic.play();
 
 		this.backgrounds = {
-			house: ["Baby", "Child"],
-			school: ["Teen", "Adult"],
-			office: ["Senior"],
+			house: ["Baby", "Senior"],
+			school: ["Child", "Teen"],
+			office: ["Adult"],
 		};
 
 		this.currentBackgroundKey = "house";
@@ -240,9 +240,9 @@ class Play extends Phaser.Scene {
 		this.stageEventMap = {
 			Baby: [1, 5, 6, 13],  // Toy, Social, Sleep, Food
 			Child: [1, 2, 3, 4, 5, 6, 10, 13],  // Toy, TakeTest, Study, Sports, Social, Sleep, JunkFood, Food
-			Teen: [2, 3, 4, 6, 9, 10, 13],  // TakeTest, Study, Sports, Sleep, Love, JunkFood, Food
+			Teen: [2, 3, 4, 6, 9, 10, 11, 13],  // TakeTest, Study, Sports, Sleep, Love, JunkFood, Food, Job
 			Adult: [0, 6, 8, 9, 10, 12, 11, 13, 14, 15],  // Travel, Sleep, NewCar, Love, JunkFood, Gamble, Job, Food, Doctors, BuyHouse
-			Senior: [0, 6, 7, 8, 13, 14, 15, 12],  // Travel, Sleep, Retire, NewCar, Food, Doctors, BuyHouse, Gamble
+			Senior: [0, 6, 7, 8, 11, 13, 14, 15, 12],  // Travel, Sleep, Retire, NewCar, Food, Doctors, BuyHouse, Gamble
 		};
 		
 
@@ -555,7 +555,7 @@ class Play extends Phaser.Scene {
 			this.moneyText.setText("Money: $" + this.money);
 		}
 		if ((event.eventType === 8 || event.eventType === 15) && this.jobDuration < 3) {
-			this.jobText.setText("You need a job for at least 3 turns to buy this!");
+			this.jobText.setText("You need a job to buy this!");
 			
 			// Clear warning after 2 seconds
 			this.time.delayedCall(2000, () => {
