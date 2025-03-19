@@ -5,13 +5,14 @@ class GameOver extends Phaser.Scene {
 
 	preload() {
 		this.load.audio("bg_music", "assets/audio/jazz.mp3");
-
 	}
 
 	create() {
-
 		this.add
-			.text(325, 200, "Game Over. You Died! Try Again.", { fontSize: "32px", fill: "#fff" })
+			.text(325, 200, "Game Over. You Died! Try Again.", {
+				fontSize: "32px",
+				fill: "#fff",
+			})
 			.setOrigin(0.5);
 		// add stats
 		this.add

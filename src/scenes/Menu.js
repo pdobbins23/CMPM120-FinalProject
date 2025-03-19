@@ -16,7 +16,10 @@ class Menu extends Phaser.Scene {
 			.text(325, 250, "HOW TO PLAY:", { fontSize: "24px", fill: "#fff" })
 			.setOrigin(0.5);
 		this.add
-			.text(325, 300, "Move: Arrow Keys and Beat High Score", { fontSize: "20px", fill: "#fff" })
+			.text(325, 300, "Move: Arrow Keys and Beat High Score", {
+				fontSize: "20px",
+				fill: "#fff",
+			})
 			.setOrigin(0.5);
 
 		this.add

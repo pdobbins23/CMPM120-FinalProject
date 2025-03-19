@@ -5,11 +5,9 @@ class Credits extends Phaser.Scene {
 
 	preload() {
 		this.load.audio("bg_music", "assets/audio/jazz.mp3");
-
 	}
 
 	create() {
-
 		this.add
 			.text(325, 180, "Credits", { fontSize: "32px", fill: "#fff" })
 			.setOrigin(0.5);
