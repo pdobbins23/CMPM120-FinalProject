@@ -181,7 +181,7 @@ class Play extends Phaser.Scene {
 		};
 		//states that affect score
 
-		this.add
+		this.stageText = this.add
 			.text(20, 20, "Stage: " + this.stages[this.stageIndex], {
 				fontSize: "20px",
 				fill: "#fff",
@@ -425,7 +425,7 @@ class Play extends Phaser.Scene {
 		this.playerState.emotionalState -= 25;
 
 		this.updateBackground();
-		//this.stageText.setText("Stage: " + this.stages[this.stageIndex]);
+		this.stageText.setText("Stage: " + this.stages[this.stageIndex]);
 
 		this.time.addEvent({
 			delay: this.stageDurations[this.stageIndex],
