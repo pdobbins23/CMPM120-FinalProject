@@ -3,7 +3,13 @@ class Credits extends Phaser.Scene {
 		super({ key: "Credits" });
 	}
 
+	preload() {
+		this.load.audio("bg_music", "assets/audio/jazz.mp3");
+
+	}
+
 	create() {
+
 		this.add
 			.text(325, 200, "Credits", { fontSize: "32px", fill: "#fff" })
 			.setOrigin(0.5);
@@ -20,7 +26,7 @@ class Credits extends Phaser.Scene {
 			})
 			.setOrigin(0.5);
 		this.add
-			.text(325, 430, "Sound effects sourced from [Source Name]", {
+			.text(325, 430, "Sound effects sourced from JFXR", {
 				fontSize: "18px",
 				fill: "#fff",
 			})

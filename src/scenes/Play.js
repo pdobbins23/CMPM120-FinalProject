@@ -85,7 +85,7 @@ class Play extends Phaser.Scene {
 		this.scoreText = this.add.text(500, 20, "Score: 0", {
 			fontSize: "20px",
 			fill: "#fff",
-		});
+		}).setDepth(11);
 
 		this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -166,6 +166,13 @@ class Play extends Phaser.Scene {
 				};
 			},
 		];
+        this.highScore = localStorage.getItem("highScore") || 0;
+
+        this.highScoreText = this.add.text(450, 50, "High Score: " + this.highScore, {
+        fontSize: "20px",
+        fill: "#fff",
+}).setDepth(11);
+
 	}
 
 	update(time, deltaTime) {
@@ -207,11 +214,12 @@ class Play extends Phaser.Scene {
 			if (this.playerState.illTime <= 0) {
 				this.playerState.ill = false;
 				this.player.setTint(0xffffff);
+                this.gameOver()
 			}
 		}
 
 		if (this.playerState.health <= 0) {
-			this.scene.start("menuScene");
+			this.scene.start("GameOver");
 		}
 	}
 
@@ -264,6 +272,7 @@ class Play extends Phaser.Scene {
 			this.playerState.ill = effect.ill;
 			this.playerState.illTime = Phaser.Math.Between(5000, 15000);
 			this.player.setTint(0x00ff00);
+            this.gameOver()
 		}
 
 		if (effect.relationship) {
@@ -288,6 +297,13 @@ class Play extends Phaser.Scene {
 
 		this.score += 10;
 		this.scoreText.setText("Score: " + this.score);
+
+        if (this.score > this.highScore) {
+            this.highScore = this.score;
+            this.highScoreText.setText("High Score: " + this.highScore);
+            localStorage.setItem("highScore", this.highScore);
+}
+
 		this.mortyEvent.play();
 
 		console.log(this.playerState);

@@ -3,9 +3,15 @@ class GameOver extends Phaser.Scene {
 		super({ key: "GameOver" });
 	}
 
+	preload() {
+		this.load.audio("bg_music", "assets/audio/jazz.mp3");
+
+	}
+
 	create() {
+
 		this.add
-			.text(325, 200, "Game Over", { fontSize: "32px", fill: "#fff" })
+			.text(325, 200, "Game Over. You Died! Try Again.", { fontSize: "32px", fill: "#fff" })
 			.setOrigin(0.5);
 		// add stats
 		this.add
@@ -16,7 +22,7 @@ class GameOver extends Phaser.Scene {
 			.setOrigin(0.5);
 
 		this.input.keyboard.on("keydown-R", () => {
-			this.scene.start("Play");
+			this.scene.start("playScene");
 		});
 
 		this.input.keyboard.on("keydown-C", () => {
