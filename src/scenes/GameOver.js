@@ -16,7 +16,7 @@ class GameOver extends Phaser.Scene {
 			.setOrigin(0.5);
 
 		this.input.keyboard.on("keydown-R", () => {
-			this.scene.start("Play");
+			this.scene.start("playScene");
 		});
 
 		this.input.keyboard.on("keydown-C", () => {

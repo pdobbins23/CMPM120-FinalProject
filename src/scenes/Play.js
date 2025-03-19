@@ -85,7 +85,7 @@ class Play extends Phaser.Scene {
 		this.scoreText = this.add.text(500, 20, "Score: 0", {
 			fontSize: "20px",
 			fill: "#fff",
-		});
+		}).setDepth(11);
 
 		this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -171,7 +171,7 @@ class Play extends Phaser.Scene {
         this.highScoreText = this.add.text(500, 50, "High Score: " + this.highScore, {
         fontSize: "20px",
         fill: "#fff",
-});
+}).setDepth(11);
 
 	}
 
@@ -214,7 +214,7 @@ class Play extends Phaser.Scene {
 			if (this.playerState.illTime <= 0) {
 				this.playerState.ill = false;
 				this.player.setTint(0xffffff);
-                this.gameOver
+                this.gameOver()
 			}
 		}
 
