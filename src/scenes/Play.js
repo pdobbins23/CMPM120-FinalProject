@@ -168,7 +168,7 @@ class Play extends Phaser.Scene {
 		];
         this.highScore = localStorage.getItem("highScore") || 0;
 
-        this.highScoreText = this.add.text(500, 50, "High Score: " + this.highScore, {
+        this.highScoreText = this.add.text(450, 50, "High Score: " + this.highScore, {
         fontSize: "20px",
         fill: "#fff",
 }).setDepth(11);
