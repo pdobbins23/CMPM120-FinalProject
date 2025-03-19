@@ -16,7 +16,24 @@ class Play extends Phaser.Scene {
 		this.load.image("sky", "assets/img/sky.png");
 
 		// Events
-		this.load.image("event", "assets/img/event.png");
+		this.load.image("travel", "assets/img/travel.png")
+		this.load.image("toy", "assets/img/toy.png")
+		this.load.image("taketest", "assets/img/take_test.png")
+		this.load.image("study", "assets/img/study.png")
+		this.load.image("sports", "assets/img/sports.png")
+		this.load.image("social", "assets/img/social.png")
+		this.load.image("sleep", "assets/img/sleep.png")
+		this.load.image("retire", "assets/img/retire.png")
+		this.load.image("newcar", "assets/img/new_car.png")
+		this.load.image("love", "assets/img/love.png")
+		this.load.image("junkfood", "assets/img/junk_food.png")
+		this.load.image("job", "assets/img/job.png")
+		this.load.image("gamble", "assets/img/gamble.png")
+		this.load.image("food", "assets/img/food.png")
+		this.load.image("doctors", "assets/img/doctors.png")
+		this.load.image("buyhouse", "assets/img/buy_house.png")
+
+
 
 		// SFX
 		this.load.audio("morty-hurt", "assets/sfx/hurt.wav");
@@ -115,61 +132,45 @@ class Play extends Phaser.Scene {
 			callbackScope: this,
 			loop: true,
 		});
+		this.eventSprites = {
+            0: "travel",
+            1: "toy",
+            2: "taketest",
+            3: "study",
+            4: "sports",
+            5: "social",
+            6: "sleep",
+            7: "retire",
+            8: "newcar",
+            9: "love",
+            10: "junkfood",
+            11: "job",
+            12: "gamble",
+            13: "food",
+            14: "doctors",
+            15: "buyhouse"
+        };
+
 
 		// Events (10 for now)
-		this.eventMap = [
-			// 0 - Toy (+emotional state)
-			(state, evt) => {
-				return { emotionalState: Phaser.Math.Between(5, 10) };
-			},
-			// 1 - Food (+health, +emotional state)
-			(state, evt) => {
-				return {
-					health: Phaser.Math.Between(2, 8),
-					emotionalState: Phaser.Math.Between(2, 5),
-				};
-			},
-			// 2 - Playdate (+emotional state, RISK illness)
-			(state, evt) => {
-				return {
-					emotionalState: Phaser.Math.Between(8, 12),
-					ill: Phaser.Math.Between(0, 100) < 25,
-				};
-			},
-			// 3 - Relationship (RISK +emotional state, SET relationship / -emotional state)
-			(state, evt) => {
-				if (Phaser.Math.Between(0, 100) < 15) {
-					return {
-						emotionalState: Phaser.Math.Between(10, 20),
-						relationship: { target: evt, status: "date" },
-					};
-				} else {
-					return {
-						emotionalState: -Phaser.Math.Between(15, 20),
-					};
-				}
-			},
-			// 4 - Take Test (CHANCE pass +emotional state, +accomplishment / fail -emotional state)
-			(state, evt) => {
-				if (Phaser.Math.Between(0, 100) < 50) {
-					return {
-						emotionalState: Phaser.Math.Between(8, 13),
-						accomplishment: 3,
-					};
-				} else {
-					return {
-						emotionalState: -Phaser.Math.Between(10, 13),
-					};
-				}
-			},
-			// 5 - Car Accident (RANGE -health, -emotional state)
-			(state, evt) => {
-				return {
-					health: -Phaser.Math.Between(10, 30),
-					emotionalState: -Phaser.Math.Between(20, 30),
-				};
-			},
-		];
+        this.eventMap = {
+            0: (state, evt) => { return { emotionalState: Phaser.Math.Between(5, 10) }; },
+            1: (state, evt) => { return { health: Phaser.Math.Between(2, 8), emotionalState: Phaser.Math.Between(2, 5) }; },
+            2: (state, evt) => { return { emotionalState: Phaser.Math.Between(8, 12), accomplishment: 2 }; },
+            3: (state, evt) => { return { emotionalState: Phaser.Math.Between(6, 12), accomplishment: 1 }; },
+            4: (state, evt) => { return { health: Phaser.Math.Between(4, 10), emotionalState: Phaser.Math.Between(5, 10) }; },
+            5: (state, evt) => { return { emotionalState: Phaser.Math.Between(10, 15), socialLife: Phaser.Math.Between(5, 10) }; },
+            6: (state, evt) => { return { health: Phaser.Math.Between(8, 12) }; },
+            7: (state, evt) => { return { emotionalState: Phaser.Math.Between(15, 20), accomplishment: 5 }; },
+            8: (state, evt) => { return { emotionalState: Phaser.Math.Between(5, 10), financialState: Phaser.Math.Between(-10, -5) }; },
+            9: (state, evt) => { return { emotionalState: Phaser.Math.Between(10, 20), relationship: { target: evt, status: "partner" } }; },
+            10: (state, evt) => { return { health: Phaser.Math.Between(-5, -10) }; },
+            11: (state, evt) => { return { accomplishment: Phaser.Math.Between(3, 7), financialState: Phaser.Math.Between(10, 20) }; },
+            12: (state, evt) => { return { financialState: Phaser.Math.Between(-20, 10) }; },
+            13: (state, evt) => { return { health: Phaser.Math.Between(5, 15) }; },
+            14: (state, evt) => { return { health: Phaser.Math.Between(10, 20) }; },
+            15: (state, evt) => { return { financialState: Phaser.Math.Between(-30, -10), accomplishment: 10 }; }
+        };
         this.highScore = localStorage.getItem("highScore") || 0;
 
         this.highScoreText = this.add.text(450, 50, "High Score: " + this.highScore, {
@@ -250,16 +251,17 @@ class Play extends Phaser.Scene {
 		});
 	}
 
-	spawnEvent() {
-		let event = this.events.create(800, Phaser.Math.Between(300, 500), "event");
-		event.setOrigin(0.5, 1).setDepth(100 + event.y);
-		event.setVelocityX(-200);
-		event.body.setSize(event.width, 10).setOffset(0, event.height - 10);
+    spawnEvent() {
+        let eventTypeIndex = Phaser.Math.Between(0, Object.keys(this.eventSprites).length - 1);
+        let eventSprite = this.eventSprites[eventTypeIndex];
 
-		event.eventType = Phaser.Math.Between(0, 5);
+        let event = this.events.create(800, Phaser.Math.Between(300, 500), eventSprite);
+        event.setOrigin(0.5, 1).setDepth(100 + event.y);
+        event.setVelocityX(-200);
+        event.body.setSize(event.width, 10).setOffset(0, event.height - 10);
 
-		event.setTint(0x3f0f * (event.eventType + 1));
-	}
+        event.eventType = eventTypeIndex;
+    }
     //events randomly coming
 
 	playEvent(player, event) {
