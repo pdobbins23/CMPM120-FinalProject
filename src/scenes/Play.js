@@ -237,6 +237,14 @@ class Play extends Phaser.Scene {
 			14: "doctors",
 			15: "buyhouse",
 		};
+		this.stageEventMap = {
+			Baby: [1, 5, 6, 13],  // Toy, Social, Sleep, Food
+			Child: [1, 2, 3, 4, 5, 6, 10, 13],  // Toy, TakeTest, Study, Sports, Social, Sleep, JunkFood, Food
+			Teen: [2, 3, 4, 6, 9, 10, 13],  // TakeTest, Study, Sports, Sleep, Love, JunkFood, Food
+			Adult: [0, 6, 8, 9, 10, 12, 11, 13, 14, 15],  // Travel, Sleep, NewCar, Love, JunkFood, Gamble, Job, Food, Doctors, BuyHouse
+			Senior: [0, 6, 7, 8, 13, 14, 15, 12],  // Travel, Sleep, Retire, NewCar, Food, Doctors, BuyHouse, Gamble
+		};
+		
 
 		// Events (10 for now)
 		this.eventMap = {
@@ -461,26 +469,27 @@ class Play extends Phaser.Scene {
 	}
 
 	spawnEvent() {
-		let eventTypeIndex = Phaser.Math.Between(
-			0,
-			Object.keys(this.eventSprites).length - 1,
-		);
+		let currentStage = this.stages[this.stageIndex];  // Get current stage
+		let allowedEvents = this.stageEventMap[currentStage];  // Get events allowed for this stage
+	
+		if (!allowedEvents || allowedEvents.length === 0) return;  // Prevent errors if no events exist
+	
+		let eventTypeIndex = Phaser.Math.RND.pick(allowedEvents);  // Pick a random event from allowed list
 		let eventSprite = this.eventSprites[eventTypeIndex];
-
-		let event = this.events.create(
-			800,
-			Phaser.Math.Between(300, 500),
-			eventSprite,
-		);
-		if (eventTypeIndex == 5) {
+	
+		let event = this.events.create(800, Phaser.Math.Between(300, 500), eventSprite);
+		
+		if (eventTypeIndex === 5) {  // If social event, play animation
 			event.play("social-event");
 		}
+	
 		event.setOrigin(0.5, 1).setDepth(100 + event.y);
 		event.setVelocityX(-200);
 		event.body.setSize(event.width, 10).setOffset(0, event.height - 10);
-
+	
 		event.eventType = eventTypeIndex;
 	}
+	
 	//events randomly coming
 
 	playEvent(player, event) {
