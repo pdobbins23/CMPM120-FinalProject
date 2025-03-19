@@ -336,6 +336,20 @@ class Play extends Phaser.Scene {
 			})
 			.setDepth(11);
 
+		this.money = 0;  // Start with zero money
+		this.jobDuration = 0;  // Track how long player has had a job
+		this.jobText = "None"
+			
+		this.moneyText = this.add.text(20, 50, "Money: $" + this.money, {
+			fontSize: "20px",
+			fill: "#fff",
+		}).setDepth(15);
+		this.jobText = this.add.text(20, 80, "Job: " + this.jobText, {
+			fontSize: "20px",
+			fill: "#fff",
+		}).setDepth(15);
+			
+
 		this.emitter = this.add
 			.particles(0, 0, "particle", {
 				frame: [],
@@ -422,6 +436,10 @@ class Play extends Phaser.Scene {
 
 	transitionTime() {
 		this.stageIndex += 1;
+		if (this.stageIndex >= this.stages.length) {
+			this.gameOver(); 
+			return;
+		}
 
 		console.log("NEW SPRITE: " + this.currentPlayerSprite());
 
@@ -520,6 +538,9 @@ class Play extends Phaser.Scene {
 
 		if (effect.hasJob) {
 			this.playerState.hasJob = effect.hasJob;
+			jobText = "Yes"
+			this.jobText.setText("Job: " + this.jobText);
+			this.jobDuration += 1;
 		}
 
 		if (effect.emotionalState) {
@@ -528,6 +549,20 @@ class Play extends Phaser.Scene {
 
 		if (effect.accomplishment) {
 			this.playerState.accomplishment += effect.accomplishment;
+		}
+		if (effect.financialState) {
+			this.money += effect.financialState;
+			this.moneyText.setText("Money: $" + this.money);
+		}
+		if ((event.eventType === 8 || event.eventType === 15) && this.jobDuration < 3) {
+			this.jobText.setText("You need a job for at least 3 turns to buy this!");
+			
+			// Clear warning after 2 seconds
+			this.time.delayedCall(2000, () => {
+				this.jobText.setText("");
+			});
+	
+			return; // Prevents the event from applying
 		}
 
 		// if (!effect.relationship)
