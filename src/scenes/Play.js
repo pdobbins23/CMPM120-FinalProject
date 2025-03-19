@@ -48,6 +48,17 @@ class Play extends Phaser.Scene {
 		});
 		this.backgroundMusic.play();
 
+		this.backgrounds = {
+            house: ["Baby", "Child"],
+            school: ["Teen", "Adult"],
+            office: ["Senior"]
+        };
+
+		this.currentBackgroundKey = "house";
+
+
+        this.currentBackground = this.add.tileSprite(0, 0, this.cameras.main.width, this.cameras.main.height, this.currentBackgroundKey).setOrigin(0).setDepth(0);
+
 		this.mortyHurt = this.sound.add("morty-hurt");
 		this.mortyEvent = this.sound.add("morty-event");
 
@@ -67,7 +78,8 @@ class Play extends Phaser.Scene {
 		this.physics.world.setBounds(0, this.cameras.main.height / 2, 640, 240);
 
 		// Backgrounds
-		this.ground = this.add.tileSprite(0, 0, 0, 0, "school", 0).setOrigin(0).setDepth(10);
+
+		this.ground = this.add.tileSprite(0, 0, 0, 0, "house", 0).setOrigin(0).setDepth(10);
 
 		this.playerHitboxHeight = 10;
 
@@ -178,10 +190,21 @@ class Play extends Phaser.Scene {
         fill: "#fff",
 }).setDepth(11);
 
+		this.emitter = this.add.particles(0, 0, "particle", {
+			frame: [],
+			lifespan: 3000,
+			speed: { min: 200, max: 250 },
+			scale: { start: 0.6, end: 0 },
+			gravityY: 0,
+			blendMode: "ADD",
+			emitting: false,
+		}).setDepth(11);
+
+
 	}
 
 	update(time, deltaTime) {
-		this.updateBackgrounds(deltaTime);
+
 		
 		let velocity = new Phaser.Math.Vector2(0, 0);
 
@@ -229,12 +252,13 @@ class Play extends Phaser.Scene {
 		}
 	}
 
-	updateBackgrounds(deltaTime) {
-		this.ground.tilePositionX += (this.playerState.speed * deltaTime) / 1000;
-	}
+
+
+
 
 	transitionTime() {
 		this.stageIndex += 1;
+
 
 		this.player.setTexture("morty-" + this.stages[this.stageIndex]);
 		this.player.setOrigin(0.5, 1);
@@ -243,12 +267,33 @@ class Play extends Phaser.Scene {
 		this.playerState.speed = this.playerSpeeds[this.stageIndex];
 		this.playerState.emotionalState -= 25;
 
+		this.updateBackground()
+		//this.stageText.setText("Stage: " + this.stages[this.stageIndex]);
+
 		this.time.addEvent({
 			delay: this.stageDurations[this.stageIndex],
 			callback: this.transitionTime,
 			callbackScope: this,
 			loop: false,
 		});
+	}
+
+	updateBackground(deltaTime) {
+
+        let currentStage = this.stages[this.stageIndex];
+        for (let bg in this.backgrounds) {
+            if (this.backgrounds[bg].includes(currentStage)) {
+                if (this.currentBackgroundKey !== bg) {
+                    this.currentBackgroundKey = bg;
+                    if (this.currentBackground) {
+                        this.currentBackground.destroy(); // Remove old background
+                    }
+                    this.currentBackground = this.add.tileSprite(0, 0, this.cameras.main.width, this.cameras.main.height, bg).setOrigin(0).setDepth(11);
+
+                }
+                break;
+			}
+		}
 	}
 
     spawnEvent() {
@@ -270,10 +315,12 @@ class Play extends Phaser.Scene {
 
 		if (effect.health) {
 			this.playerState.health += effect.health;
+
 		}
 
 		if (effect.injured) {
 			this.playerState.injured = effect.injured;
+
 		}
 
 		if (effect.ill) {
@@ -286,22 +333,29 @@ class Play extends Phaser.Scene {
 
 		if (effect.relationship) {
 			this.playerState.relationship = effect.relationship;
+
 			// event.startFollow(player);
 		}
 
 		if (effect.hasJob) {
 			this.playerState.hasJob = effect.hasJob;
+	
 		}
 
 		if (effect.emotionalState) {
 			this.playerState.emotionalState += effect.emotionalState;
+
 		}
 
 		if (effect.accomplishment) {
 			this.playerState.accomplishment += effect.accomplishment;
+
 		}
 
 		// if (!effect.relationship)
+		this.emitter.setPosition(event.x, event.y);
+        this.emitter.explode(10);
+		//particles when event is picked up
 		event.destroy();
 
 		this.score += 10;
