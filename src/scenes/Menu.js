@@ -20,7 +20,7 @@ class Menu extends Phaser.Scene {
 			.setOrigin(0.5);
 
 		this.add
-			.text(325, 180, "Press SPACE to Start", {
+			.text(325, 180, "Press SPACE to Start or C for Credits", {
 				fontSize: "24px",
 				fill: "#fff",
 			})
@@ -31,6 +31,10 @@ class Menu extends Phaser.Scene {
 		this.input.keyboard.on("keydown-SPACE", () => {
 			this.sound.stopAll();
 			this.scene.start("playScene");
+		});
+
+		this.input.keyboard.on("keydown-C", () => {
+			this.scene.start("Credits");
 		});
 	}
 }

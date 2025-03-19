@@ -16,6 +16,7 @@ class GameOver extends Phaser.Scene {
 		// add stats
 		this.add
 			.text(325, 300, "Press R to Restart or C for Credits", {
+				//game ending and a chance to restart
 				fontSize: "24px",
 				fill: "#fff",
 			})

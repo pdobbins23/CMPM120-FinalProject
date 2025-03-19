@@ -11,20 +11,15 @@ class Credits extends Phaser.Scene {
 	create() {
 
 		this.add
-			.text(325, 200, "Credits", { fontSize: "32px", fill: "#fff" })
+			.text(325, 180, "Credits", { fontSize: "32px", fill: "#fff" })
 			.setOrigin(0.5);
 		this.add
-			.text(325, 300, "Developed by Peter Dobbins and Seeya Pillai", {
+			.text(325, 230, "Developed by Peter Dobbins and Seeya Pillai", {
 				fontSize: "24px",
 				fill: "#fff",
 			})
 			.setOrigin(0.5);
-		this.add
-			.text(325, 400, "Assets sourced from [Source Name]", {
-				fontSize: "18px",
-				fill: "#fff",
-			})
-			.setOrigin(0.5);
+
 		this.add
 			.text(325, 430, "Sound effects sourced from JFXR", {
 				fontSize: "18px",
@@ -33,7 +28,7 @@ class Credits extends Phaser.Scene {
 			.setOrigin(0.5);
 
 		this.add
-			.text(325, 400, "Press M to return to Menu", {
+			.text(325, 320, "Press M to return to Menu", {
 				fontSize: "20px",
 				fill: "#fff",
 			})

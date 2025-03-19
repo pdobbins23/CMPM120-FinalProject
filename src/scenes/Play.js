@@ -43,6 +43,7 @@ class Play extends Phaser.Scene {
 			"Senior",
 		];
 		this.stageDurations = [10000, 15000, 17500, 20000, 30000, 60000, 30000];
+        // different times for each level to lead to game ending
 		
 		this.score = 0;
 
@@ -63,6 +64,7 @@ class Play extends Phaser.Scene {
 			.setSize(this.player.width, this.playerHitboxHeight)
 			.setOffset(0, this.player.height - this.playerHitboxHeight);
 		this.player.setCollideWorldBounds(true);
+        //player design/physics 
 
 		this.playerSpeeds = [50, 60, 100, 120, 125, 120, 100];
 
@@ -77,11 +79,13 @@ class Play extends Phaser.Scene {
 			emotionalState: 100,
 			accomplishment: 0,
 		};
+        //states that affect score
 
 		this.add.text(20, 20, "Stage: " + this.stages[this.stageIndex], {
 			fontSize: "20px",
 			fill: "#fff",
-		});
+		}).setDepth(11)
+
 		this.scoreText = this.add.text(500, 20, "Score: 0", {
 			fontSize: "20px",
 			fill: "#fff",
@@ -195,6 +199,7 @@ class Play extends Phaser.Scene {
 		if (this.cursors.right.isDown) {
 			velocity.x += 1;
 		}
+        //player movement
 
 		velocity.normalize();
 
@@ -255,6 +260,7 @@ class Play extends Phaser.Scene {
 
 		event.setTint(0x3f0f * (event.eventType + 1));
 	}
+    //events randomly coming
 
 	playEvent(player, event) {
 		console.log(event.eventType);
@@ -273,6 +279,7 @@ class Play extends Phaser.Scene {
 			this.playerState.illTime = Phaser.Math.Between(5000, 15000);
 			this.player.setTint(0x00ff00);
             this.gameOver()
+            //if ill then game over
 		}
 
 		if (effect.relationship) {
