@@ -338,7 +338,7 @@ class Play extends Phaser.Scene {
 
 		this.money = 0;  // Start with zero money
 		this.jobDuration = 0;  // Track how long player has had a job
-		this.jobText = "None"
+		this.jobText = ""
 			
 		this.moneyText = this.add.text(20, 50, "Money: $" + this.money, {
 			fontSize: "20px",
