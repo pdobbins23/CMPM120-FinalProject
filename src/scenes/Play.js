@@ -472,6 +472,9 @@ class Play extends Phaser.Scene {
 			Phaser.Math.Between(300, 500),
 			eventSprite,
 		);
+		if (eventTypeIndex == 5) {
+			event.play("social-event");
+		}
 		event.setOrigin(0.5, 1).setDepth(100 + event.y);
 		event.setVelocityX(-200);
 		event.body.setSize(event.width, 10).setOffset(0, event.height - 10);
