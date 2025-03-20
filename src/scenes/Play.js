@@ -147,18 +147,14 @@ class Play extends Phaser.Scene {
 		// Backgrounds
 
 		// this.ground = this.add
-			// .tileSprite(0, 0, 0, 0, "house", 0)
-			// .setOrigin(0)
-			// .setDepth(10);
+		// .tileSprite(0, 0, 0, 0, "house", 0)
+		// .setOrigin(0)
+		// .setDepth(10);
 		this.updateBackground();
 
 		this.playerHitboxHeight = 10;
 
-		this.player = this.physics.add.sprite(
-			100,
-			500,
-			"morty-Baby",
-		);
+		this.player = this.physics.add.sprite(100, 500, "morty-Baby");
 		this.player.setOrigin(0.5, 1).setDepth(100);
 		this.player.body
 			.setSize(this.player.width, this.playerHitboxHeight)
@@ -238,13 +234,12 @@ class Play extends Phaser.Scene {
 			15: "buyhouse",
 		};
 		this.stageEventMap = {
-			Baby: [1, 5, 6, 13],  // Toy, Social, Sleep, Food
-			Child: [1, 2, 3, 4, 5, 6, 10, 13],  // Toy, TakeTest, Study, Sports, Social, Sleep, JunkFood, Food
-			Teen: [2, 3, 4, 6, 9, 10, 11, 13],  // TakeTest, Study, Sports, Sleep, Love, JunkFood, Food, Job
-			Adult: [0, 6, 8, 9, 10, 12, 11, 13, 14, 15],  // Travel, Sleep, NewCar, Love, JunkFood, Gamble, Job, Food, Doctors, BuyHouse
-			Senior: [0, 6, 7, 8, 11, 13, 14, 15, 12],  // Travel, Sleep, Retire, NewCar, Food, Doctors, BuyHouse, Gamble
+			Baby: [1, 5, 6, 13], // Toy, Social, Sleep, Food
+			Child: [1, 2, 3, 4, 5, 6, 10, 13], // Toy, TakeTest, Study, Sports, Social, Sleep, JunkFood, Food
+			Teen: [2, 3, 4, 6, 9, 10, 11, 13], // TakeTest, Study, Sports, Sleep, Love, JunkFood, Food, Job
+			Adult: [0, 6, 8, 9, 10, 12, 11, 13, 14, 15], // Travel, Sleep, NewCar, Love, JunkFood, Gamble, Job, Food, Doctors, BuyHouse
+			Senior: [0, 6, 7, 8, 11, 13, 14, 15, 12], // Travel, Sleep, Retire, NewCar, Food, Doctors, BuyHouse, Gamble
 		};
-		
 
 		// Events (10 for now)
 		this.eventMap = {
@@ -336,19 +331,22 @@ class Play extends Phaser.Scene {
 			})
 			.setDepth(11);
 
-		this.money = 0;  // Start with zero money
-		this.jobDuration = 0;  // Track how long player has had a job
-		this.jobText = ""
-			
-		this.moneyText = this.add.text(20, 50, "Money: $" + this.money, {
-			fontSize: "20px",
-			fill: "#fff",
-		}).setDepth(15);
-		this.jobText = this.add.text(20, 80, "Job: " + this.jobText, {
-			fontSize: "20px",
-			fill: "#fff",
-		}).setDepth(15);
-			
+		this.money = 0; // Start with zero money
+		this.jobDuration = 0; // Track how long player has had a job
+		this.jobText = "";
+
+		this.moneyText = this.add
+			.text(20, 50, "Money: $" + this.money, {
+				fontSize: "20px",
+				fill: "#fff",
+			})
+			.setDepth(15);
+		this.jobText = this.add
+			.text(20, 80, "Job: " + this.jobText, {
+				fontSize: "20px",
+				fill: "#fff",
+			})
+			.setDepth(15);
 
 		this.emitter = this.add
 			.particles(0, 0, "particle", {
@@ -366,8 +364,9 @@ class Play extends Phaser.Scene {
 	}
 
 	update(time, deltaTime) {
-		this.currentBackground.tilePositionX += (this.playerState.speed * deltaTime) / 1000;
-		
+		this.currentBackground.tilePositionX +=
+			(this.playerState.speed * deltaTime) / 1000;
+
 		let velocity = new Phaser.Math.Vector2(0, 0);
 
 		if (this.cursors.up.isDown) {
@@ -410,7 +409,7 @@ class Play extends Phaser.Scene {
 		}
 
 		if (this.playerState.health <= 0) {
-			this.scene.start("GameOver");
+			this.gameOver();
 		}
 	}
 
@@ -437,7 +436,7 @@ class Play extends Phaser.Scene {
 	transitionTime() {
 		this.stageIndex += 1;
 		if (this.stageIndex >= this.stages.length) {
-			this.gameOver(); 
+			this.gameOver();
 			return;
 		}
 
@@ -487,27 +486,32 @@ class Play extends Phaser.Scene {
 	}
 
 	spawnEvent() {
-		let currentStage = this.stages[this.stageIndex];  // Get current stage
-		let allowedEvents = this.stageEventMap[currentStage];  // Get events allowed for this stage
-	
-		if (!allowedEvents || allowedEvents.length === 0) return;  // Prevent errors if no events exist
-	
-		let eventTypeIndex = Phaser.Math.RND.pick(allowedEvents);  // Pick a random event from allowed list
+		let currentStage = this.stages[this.stageIndex]; // Get current stage
+		let allowedEvents = this.stageEventMap[currentStage]; // Get events allowed for this stage
+
+		if (!allowedEvents || allowedEvents.length === 0) return; // Prevent errors if no events exist
+
+		let eventTypeIndex = Phaser.Math.RND.pick(allowedEvents); // Pick a random event from allowed list
 		let eventSprite = this.eventSprites[eventTypeIndex];
-	
-		let event = this.events.create(800, Phaser.Math.Between(300, 500), eventSprite);
-		
-		if (eventTypeIndex === 5) {  // If social event, play animation
+
+		let event = this.events.create(
+			800,
+			Phaser.Math.Between(300, 500),
+			eventSprite,
+		);
+
+		if (eventTypeIndex === 5) {
+			// If social event, play animation
 			event.play("social-event");
 		}
-	
+
 		event.setOrigin(0.5, 1).setDepth(100 + event.y);
 		event.setVelocityX(-200);
 		event.body.setSize(event.width, 10).setOffset(0, event.height - 10);
-	
+
 		event.eventType = eventTypeIndex;
 	}
-	
+
 	//events randomly coming
 
 	playEvent(player, event) {
@@ -538,7 +542,7 @@ class Play extends Phaser.Scene {
 
 		if (effect.hasJob) {
 			this.playerState.hasJob = effect.hasJob;
-			jobText = "Yes"
+			jobText = "Yes";
 			this.jobText.setText("Job: " + this.jobText);
 			this.jobDuration += 1;
 		}
@@ -554,14 +558,17 @@ class Play extends Phaser.Scene {
 			this.money += effect.financialState;
 			this.moneyText.setText("Money: $" + this.money);
 		}
-		if ((event.eventType === 8 || event.eventType === 15) && this.jobDuration < 3) {
+		if (
+			(event.eventType === 8 || event.eventType === 15) &&
+			this.jobDuration < 3
+		) {
 			this.jobText.setText("You need a job to buy this!");
-			
+
 			// Clear warning after 2 seconds
 			this.time.delayedCall(2000, () => {
 				this.jobText.setText("");
 			});
-	
+
 			return; // Prevents the event from applying
 		}
 
@@ -588,6 +595,7 @@ class Play extends Phaser.Scene {
 	}
 
 	gameOver() {
+		this.sound.stopAll();
 		this.scene.start("GameOver");
 	}
 }
